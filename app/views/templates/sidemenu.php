@@ -58,6 +58,9 @@
                                 <ul class="vertical-submenu">
                                     <li><a href="<?= BASEURL ?>/tentang">tentang</a></li>
                                 </ul>
+                                <ul class="vertical-submenu">
+                                    <li><a href="<?= BASEURL ?>/tentang/bantuan">Bantuan</a></li>
+                                </ul>
                             </li>
                         </ul>
                     <?php } else if ($sessionUserType == KEPALA_USR) { ?>
@@ -76,6 +79,9 @@
                                 </a>
                                 <ul class="vertical-submenu">
                                     <li><a href="<?= BASEURL ?>/tentang">tentang</a></li>
+                                </ul>
+                                <ul class="vertical-submenu">
+                                    <li><a href="<?= BASEURL ?>/tentang/bantuan">Bantuan</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -116,6 +122,9 @@
                                 <ul class="vertical-submenu">
                                     <li><a href="<?= BASEURL ?>/tentang">tentang</a></li>
                                 </ul>
+                                <ul class="vertical-submenu">
+                                    <li><a href="<?= BASEURL ?>/tentang/bantuan">Bantuan</a></li>
+                                </ul>
                             </li>
                         </ul>
                     <?php } else if ($sessionUserType == ADMIN_USR) { ?>
@@ -153,6 +162,9 @@
                                 </a>
                                 <ul class="vertical-submenu">
                                     <li><a href="<?= BASEURL ?>/tentang">tentang</a></li>
+                                </ul>
+                                <ul class="vertical-submenu">
+                                    <li><a href="<?= BASEURL ?>/tentang/bantuan">Bantuan</a></li>
                                 </ul>
                             </li>
                         </ul>

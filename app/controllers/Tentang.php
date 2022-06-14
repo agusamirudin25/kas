@@ -11,4 +11,13 @@ class Tentang extends Controller
         $this->view('templates/footer');
     }
 
+    public function bantuan()
+    {
+        $data['judul']      = 'Bantuan';
+        $this->view('templates/header', $data);
+        $this->view('templates/sidemenu');
+        $this->view('tentang/bantuan', $data);
+        $this->view('templates/footer');
+    }
+
 }
