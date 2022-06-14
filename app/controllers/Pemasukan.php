@@ -19,6 +19,13 @@ class Pemasukan extends Controller
         echo json_encode($allData);
     }
 
+    public function getAnggaranById()
+    {
+        $allData = [];
+        $allData = $this->model("AnggaranModel")->getDataPemasukanById($_POST['id']);
+        echo json_encode($allData);
+    }
+
     public function tambah()
     {
         $_POST['tipe_anggaran'] = UANG_MASUK;
@@ -27,6 +34,8 @@ class Pemasukan extends Controller
         echo "<pre>";
         print_r($saveData);
         echo "</pre>";
+        $saveData['nominal'] = str_replace('.', '', $saveData['nominal']);
+
         if ($this->model("AnggaranModel")->tambahData($saveData) > 0) {
             Flasher::setFlash('berhasil', 'ditambahkan', 'success', 'anggaran');
             header('Location: ' . BASEURL . '/anggaran');
@@ -43,6 +52,7 @@ class Pemasukan extends Controller
         $_POST['tipe_anggaran'] = UANG_MASUK;
         $_POST['status'] = WAITING;
         $updateData = $_POST;
+        $updateData['nominal'] = str_replace('.', '', $updateData['nominal']);
 
         if ($this->model("AnggaranModel")->ubahData($updateData) > 0) {
             Flasher::setFlash('berhasil', 'ditambahkan', 'success', 'anggaran');

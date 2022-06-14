@@ -41,6 +41,7 @@
     <script src="<?= BASEURL ?>/assets/plugins/apexcharts/irregular-data-series.js"></script>    
     <!-- Slick js -->
     <script src="<?= BASEURL ?>/assets/plugins/slick/slick.min.js"></script>
+    <script src="<?= BASEURL ?>/assets/plugins/jquery-mask/jquery.mask.js"></script>
     <!-- Custom Dashboard js -->   
     <script src="<?= BASEURL ?>/assets/js/custom/custom-dashboard.js"></script>
      

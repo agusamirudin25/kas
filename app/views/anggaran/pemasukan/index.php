@@ -180,6 +180,7 @@ $dataDonatur        = $data['donatur'];
 <script>
     $(document).ready(function() {
         $('#table-donatur').DataTable();
+        $('.nominalData').mask('000.000.000', {reverse: true});
         $('.getNamaKegiatan').on('click', function() {
             const kegiatan = $(this).data('kegiatan');
             const id = $(this).data('id');
@@ -240,28 +241,31 @@ $dataDonatur        = $data['donatur'];
                         var inner_view3 = "view3_" + index;
                         var function_viewDonatur = "viewDonatur('" + inner_view + "', '" + inner_view2 + "', '" + inner_view3 + "')";
                         var function_save = "saveDataElement('" + inner_data + "')";
+                        var function_edit = "editDataElement('" + inner_data + "')";
                         var function_connfirmation = "hapusData(" + element.id_anggaran + ");"
                         var tipeUangMasuk = (parseInt(element.tipe_anggaran) === parseInt("<?= UANG_MASUK ?>")) ? "selected" : " ";
                         var tipeUangKeluar = (parseInt(element.tipe_anggaran) === parseInt("<?= UANG_KELUAR ?>")) ? "selected" : " ";
                         var namaDonatur = (element.nama_donatur != null) ? element.nama_donatur : "-";
+                        data_load += `<input type="hidden" id="element_${inner_data}" value="${element.id_anggaran}">`;
                         data_load += '<tr>'
                         data_load += '    <td><input class="form-control" value="' + element.id_anggaran + '" type="hidden" name="id" id="" >' + num + '</td>'
                         data_load += '    <td class="dataInput"><input class="form-control" value="' + element.tanggal + '" type="date" name="tanggal" id="" placeholder="tanggal" readonly="readonly"></td>'
-                        data_load += '    <td class="dataInput"><input class="form-control" value="' + element.keterangan + '" type="text" name="keterangan" id="" placeholder="keterangan" required ></td>'
                         data_load += '    <td class="dataInput">'
                         data_load += '          <a  style="text-decoration:none" onclick="' + function_viewDonatur + '" href="#"><span id="' + inner_view2 + '">' + namaDonatur + '</span></a>'
                         data_load += '          <input class="form-control" value="' + element.id_donatur + '" type="hidden" name="id_donatur" id="' + inner_view3 + '" placeholder="id_donatur" required >'
                         data_load += '    </td>'
-                        data_load += '    <td class="dataInput"><input class="form-control nominalData" value="' + element.nominal + '" type="number" name="nominal" id="" placeholder="nominal" required ></td>'
+                        data_load += '    <td class="dataInput d-flex"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">Rp. </span></div><input type="text" class="form-control nominalData" value="' + element.nominal + '" name="nominal" placeholder="nominal" required></td>'
+                        
                         data_load += '    <td class="dataInput">'
                         data_load += '          <button class="getHapus btn btn-danger waves-effect waves-light" data-id="' + element.id_anggaran + '" onclick="' + function_connfirmation + '"><span>Hapus</span></button>'
-                        data_load += '          <button class="save btn btn-primary waves-effect waves-light" id="' + inner_data + '" onclick="' + function_save + '">Simpan</button>'
+                        data_load += '          <button class="save btn btn-warning waves-effect waves-light" id="' + inner_data + '" onclick="' + function_edit + '">Edit</button>'
                         data_load += '    </td>'
                         data_load += '</tr>'
                     }
                 }
 
                 $('#resultAnggaran').html(data_load);
+                $('.nominalData').mask('000.000.000.000', {reverse: true});
             },
             error: function(data) {
                 console.log(data);
@@ -352,11 +356,19 @@ $dataDonatur        = $data['donatur'];
         inp.setAttribute('value', $("#id_kegiatan").val())
         form_costume.append(inp)
 
+        // validasi keterangan
+        if ($("#keterangan").val() == "") {
+            $("#message").html(message('uraian', 'harus diisi', 'danger', ''));
+            return;
+        }
         $('#formSubmitData').append(form_costume)
 
+
+        let keteranganUraian = $('#keterangan').val();
+        let data = $('#insert-anggaran').serialize() + '&keterangan=' + keteranganUraian;
         $.ajax({
             url: url_send_data,
-            data: $('#insert-anggaran').serialize(),
+            data: data,
             method: 'post',
             success: function(result) {
                 console.log(result);
@@ -371,6 +383,40 @@ $dataDonatur        = $data['donatur'];
             }
         });
 
+    }
+
+    function editDataElement(id){
+        var data_id = document.getElementById(`element_${id}`).value;
+        // get hidden data
+        $.ajax({
+            url: '<?= BASEURL; ?>/pemasukan/getAnggaranById',
+            data: {
+                id: data_id
+            },
+            method: 'post',
+            dataType: 'json',
+            success: function(data) {
+                var wrapperUraian = `<div class="form-group" id="wrapperUraian">
+                        <label for="keterangan">Uraian</label>
+                        <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required placeholder="Masukan uraian"></textarea>
+                        </div>`;
+                num = 0;
+                if (data.length != 0) {
+                    if ($('#wrapperUraian').length == 0) {
+                        $('#uraianBaru').append(wrapperUraian);
+                    }
+                    $('#keterangan').val(data[0].keterangan);
+                    $(`#${id}`).attr('onclick', `saveDataElement('${id}')`);
+                    $(`#${id}`).removeClass('btn-warning');
+                    $(`#${id}`).addClass('btn-primary');
+                    $(`#${id}`).html('Simpan');
+                }
+            },
+            error: function(data) {
+                console.log(data);
+                console.log("ERROR");
+            }
+        });
     }
 
     function removeElement(id) {
@@ -406,7 +452,7 @@ $dataDonatur        = $data['donatur'];
         var function_viewDonatur = "viewDonatur('" + inner_view + "', '" + inner_view2 + "', '" + inner_view3 + "')";
         var function_save = "saveDataElement('" + inner_data + "')";
         var function_remove = "removeElement('" + inner_data + "')";
-        var wrapperUraian = `<div class="form-group">
+        var wrapperUraian = `<div class="form-group" id="wrapperUraian">
                         <label for="keterangan">Uraian</label>
                         <textarea class="form-control" id="keterangan" name="keterangan" rows="3" required placeholder="Masukan uraian"></textarea>
                         </div>`;
@@ -418,15 +464,20 @@ $dataDonatur        = $data['donatur'];
         data_load += '          <a  style="text-decoration:none" onclick="' + function_viewDonatur + '" href="#"><span id="' + inner_view2 + '"> - </span></a>'
         data_load += '          <input class="form-control" value="" type="hidden" name="id_donatur" id="' + inner_view3 + '" placeholder="id_donatur" required >'
         data_load += '    </td>'
-        data_load += '    <td class="dataInput"><input class="form-control nominalData" value="" type="number" name="nominal" id="" placeholder="nominal" lang="en-150" required></td>'
+        data_load += '    <td class="dataInput d-flex"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">Rp. </span></div><input type="text" class="form-control nominalData" name="nominal" placeholder="nominal" required></td>'
         data_load += '    <td class="dataInput">'
         data_load += '          <button class="btn btn-danger waves-effect waves-light"  onclick="' + function_remove + '"><span>Hapus</span></button>'
         data_load += '          <button class="save btn btn-primary waves-effect waves-light" id="' + inner_data + '" onclick="' + function_save + '">Simpan</button>'
         data_load += '    </td>'
         data_load += '</tr>'
         $('#button_tambah').attr('onclick', "tambahDataElement('" + id + "')");
-        $('#uraianBaru').append(wrapperUraian);
+        // cek jika element sudah ada maka tidak akan ditambahkan
+        if ($('#wrapperUraian').length == 0) {
+            $('#uraianBaru').append(wrapperUraian);
+        }
+            
         $('#resultAnggaranEmpty').append(data_load);
+        $('.nominalData').mask('000.000.000.000', {reverse: true});
     }
 
     function message(pesan, aksi, tipe, data) {

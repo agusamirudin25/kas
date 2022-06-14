@@ -49,6 +49,16 @@ class AnggaranModel
         return $allData;
     }
 
+    public function getDataPemasukanById($id_anggaran)
+    {
+        $allData = [];
+        $this->db->query(" SELECT keterangan FROM anggaran
+                            WHERE id_anggaran =:id_anggaran");
+        $this->db->bind('id_anggaran', $id_anggaran);
+        $allData = $this->db->resultset();
+        return $allData;
+    }
+
     public function tambahData($data)
     {
         $query = " INSERT INTO 
