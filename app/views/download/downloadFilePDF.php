@@ -22,19 +22,19 @@
                 </div>
                 <div class="row">
                     <label for="example-text-input" class="col-sm-3 col-form-label">Pengguna Anggaran (PA)/Kuasa PA/Pengurus</label>
-                    <label for="example-text-input" class="col-sm-2 col-form-label">: <?= $data['nama_KPA']['nama_pengurus'] ?></label>
+                    <label for="example-text-input" class="col-sm-9 col-form-label">: <?= $data['nama_KPA']['nama_pengurus'] ?></label>
                 </div>
                 <div class="row">
                     <label for="example-text-input" class="col-sm-3 col-form-label">Bendahara</label>
-                    <label for="example-text-input" class="col-sm-2 col-form-label">: <?= $data['nama_Bendahara']['nama_pengurus'] ?></label>
+                    <label for="example-text-input" class="col-sm-9 col-form-label">: <?= $data['nama_Bendahara']['nama_pengurus'] ?></label>
                 </div>
                 <div class="row">
                     <label for="example-text-input" class="col-sm-3 col-form-label">Bendahara Pembantu</label>
-                    <label for="example-text-input" class="col-sm-2 col-form-label">: - </label>
+                    <label for="example-text-input" class="col-sm-9 col-form-label">: - </label>
                 </div>
                 <div class="row">
                     <label for="example-text-input" class="col-sm-3 col-form-label">Bulan</label>
-                    <label for="example-text-input" class="col-sm-2 col-form-label">: <span id="bulan_search"><?= $data['bulan'] ?></span></label>
+                    <label for="example-text-input" class="col-sm-9 col-form-label">: <span id="bulan_search"><?= $data['bulan'] ?></span></label>
                 </div>
                 <hr>
                 <table class="table table-bordered data-table-format">
