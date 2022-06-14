@@ -190,8 +190,8 @@ $dataKegiatan       = $data['kegiatan'];
                         data_load += '<tr>'
                         data_load += '    <td><input class="form-control" value="' + element.id_anggaran + '" type="hidden" name="id" id="" >' + num + '</td>'
                         data_load += '    <td class="dataInput"><input class="form-control" value="' + element.tanggal + '" type="date" name="tanggal" id="" placeholder="tanggal" readonly="readonly"></td>'
-                        data_load += '    <td class="dataInput"><input class="form-control" value="' + element.keterangan + '" type="text" name="keterangan" id="" placeholder="keterangan" required ></td>'
-                        data_load += '    <td class="dataInput"><input class="form-control" value="' + element.nominal + '" type="number" name="nominal" id="" placeholder="nominal" required ></td>'
+                        data_load += '    <td class="dataInput"><textarea class="form-control" name="keterangan" id="" placeholder="Uraian" required rows=3>' + element.keterangan + '</textarea> </td>'
+                        data_load += '    <td class="dataInput d-flex"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">Rp. </span></div><input type="text" class="form-control nominalData" value="' + element.nominal + '" name="nominal" placeholder="nominal" required></td>'
                         data_load += '    <td class="dataInput">'
                         data_load += '          <button class="getHapus btn btn-danger waves-effect waves-light" data-id="' + element.id_anggaran + '" onclick="' + function_connfirmation + '"><span>Hapus</span></button>'
                         data_load += '          <button class="save btn btn-primary waves-effect waves-light" id="' + inner_data + '" onclick="' + function_save + '">Simpan</button>'
@@ -201,6 +201,7 @@ $dataKegiatan       = $data['kegiatan'];
                 }
 
                 $('#resultAnggaran').html(data_load);
+                $('.nominalData').mask('000.000.000.000', {reverse: true});
             },
             error: function(data) {
                 console.log(data);
@@ -254,7 +255,7 @@ $dataKegiatan       = $data['kegiatan'];
 
                     for (let j = 0; j < element.children.length; j++) {
                         const element01 = element.children[j];
-                        if (element01.tagName == "INPUT" || element01.tagName == "SELECT") {
+                        if (element01.tagName == "INPUT" || element01.tagName == "SELECT" || element01.tagName == "TEXTAREA") {
                             element01_name = element01.name;
                             if (element01.tagName == "SELECT") {
                                 element01_value = element01.options[element01.selectedIndex].value;
@@ -345,8 +346,8 @@ $dataKegiatan       = $data['kegiatan'];
         data_load += '<tr>'
         data_load += '    <td bgcolor="SteelBlue"><input class="form-control" value="0" type="hidden" name="id" id="" placeholder="tanggal"></td>'
         data_load += '    <td class="dataInput"><input class="form-control" value="' + $("#tanggal_kegiatan").val() + '" type="date" name="tanggal" id="" placeholder="tanggal" readonly="readonly"></td>'
-        data_load += '    <td class="dataInput"><input class="form-control" value="" type="text" name="keterangan" id="" placeholder="Uraian" required></td>'
-        data_load += '    <td class="dataInput"><input class="form-control" value="" type="number" name="nominal" id="" placeholder="nominal" required></td>'
+        data_load += '    <td class="dataInput"><textarea class="form-control" name="keterangan" id="" placeholder="Uraian" required rows=3></textarea> </td>'
+        data_load += '    <td class="dataInput d-flex"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">Rp. </span></div><input type="text" class="form-control nominalData" name="nominal" placeholder="nominal" required></td>'
         data_load += '    <td class="dataInput">'
         data_load += '          <button class="btn btn-danger waves-effect waves-light"  onclick="' + function_remove + '"><span>Hapus</span></button>'
         data_load += '          <button class="save btn btn-primary waves-effect waves-light" id="' + inner_data + '" onclick="' + function_save + '">Simpan</button>'
@@ -354,6 +355,7 @@ $dataKegiatan       = $data['kegiatan'];
         data_load += '</tr>'
         $('#button_tambah').attr('onclick', "tambahDataElement('" + id + "')");
         $('#resultAnggaranEmpty').append(data_load);
+        $('.nominalData').mask('000.000.000.000', {reverse: true});
     }
 
     function message(pesan, aksi, tipe, data) {

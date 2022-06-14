@@ -17,6 +17,7 @@ class Pengeluaran extends Controller
         $_POST['id_donatur'] = 0;
         $_POST['status'] = WAITING;
         $saveData = $_POST;
+        $saveData['nominal'] = str_replace('.', '', $saveData['nominal']);
 
         if ($this->model("AnggaranModel")->tambahData($saveData) > 0) {
             Flasher::setFlash('berhasil', 'ditambahkan', 'success', 'pengeluaran');
@@ -35,6 +36,7 @@ class Pengeluaran extends Controller
         $_POST['id_donatur'] = 0;
         $_POST['status'] = WAITING;
         $updateData = $_POST;
+        $updateData['nominal'] = str_replace('.', '', $updateData['nominal']);
 
         if ($this->model("AnggaranModel")->ubahData($updateData) > 0) {
             Flasher::setFlash('berhasil', 'ditambahkan', 'success', 'pengeluaran');
@@ -47,16 +49,10 @@ class Pengeluaran extends Controller
         }
     }
 
-    public function hapus($id){
-        if ($this->model("AnggaranModel")->hapusData($id) > 0) {
-            Flasher::setFlash('berhasil', 'dihapus', 'success', 'pengeluaran');
-            header('Location: ' . BASEURL . '/pengeluaran');
-            exit;
-        } else {
-            Flasher::setFlash('gagal', 'dihapus', 'danger', 'pengeluaran');
-            header('Location: ' . BASEURL . '/pengeluaran');
-            exit;
-        }
+    public function hapus(){
+        $id = $_POST['id'];
+        $result = $this->model("AnggaranModel")->hapusData($id);
+        echo json_encode($result);
     }
 
     public function getUbah()
