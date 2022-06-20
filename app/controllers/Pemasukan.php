@@ -16,6 +16,11 @@ class Pemasukan extends Controller
     {
         $allData = [];
         $allData = $this->model("AnggaranModel")->getDataByIdKegiatan($_POST['id'], UANG_MASUK);
+        $kegiatan = $this->model("KegiatanModel")->getAllData();
+        $allData = [
+            'data' => $allData,
+            'kegiatan' => $kegiatan
+        ];
         echo json_encode($allData);
     }
 
@@ -31,10 +36,12 @@ class Pemasukan extends Controller
         $_POST['tipe_anggaran'] = UANG_MASUK;
         $_POST['status'] = WAITING;
         $saveData = $_POST;
+        $saveData['nominal'] = str_replace('.', '', $saveData['nominal']);
+        $saveData['id_kegiatan'] = $saveData['kegiatan'];
+        unset($saveData['kegiatan']);
         echo "<pre>";
         print_r($saveData);
         echo "</pre>";
-        $saveData['nominal'] = str_replace('.', '', $saveData['nominal']);
 
         if ($this->model("AnggaranModel")->tambahData($saveData) > 0) {
             Flasher::setFlash('berhasil', 'ditambahkan', 'success', 'anggaran');
@@ -53,6 +60,8 @@ class Pemasukan extends Controller
         $_POST['status'] = WAITING;
         $updateData = $_POST;
         $updateData['nominal'] = str_replace('.', '', $updateData['nominal']);
+        $updateData['id_kegiatan'] = $_POST['kegiatan'];
+        unset($updateData['kegiatan']);
 
         if ($this->model("AnggaranModel")->ubahData($updateData) > 0) {
             Flasher::setFlash('berhasil', 'ditambahkan', 'success', 'anggaran');

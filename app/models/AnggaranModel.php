@@ -41,8 +41,9 @@ class AnggaranModel
     public function getDataByIdKegiatan($id_kegiatan, $tipe_anggaran)
     {
         $allData = [];
-        $this->db->query(" SELECT a.*, d.* FROM anggaran a LEFT JOIN donatur d on d.id_donatur = a.id_donatur 
-                            WHERE id_kegiatan =:id_kegiatan  and tipe_anggaran =:tipe_anggaran ");
+        $this->db->query(" SELECT a.*, d.*, k.nama_kegiatan FROM anggaran a LEFT JOIN donatur d on d.id_donatur = a.id_donatur
+                            LEFT JOIN kegiatan k ON a.id_kegiatan = k.id_kegiatan
+                            WHERE a.id_kegiatan =:id_kegiatan  and tipe_anggaran =:tipe_anggaran ");
         $this->db->bind('id_kegiatan', $id_kegiatan);
         $this->db->bind('tipe_anggaran', $tipe_anggaran);
         $allData = $this->db->resultset();

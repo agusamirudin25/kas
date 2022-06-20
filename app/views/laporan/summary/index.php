@@ -45,7 +45,7 @@
                 <div class="card-body">
                     <hr>
                     <div class="row">
-                        <label for="example-text-input" class="col-sm-3 col-form-label">Organisai</label>
+                        <label for="example-text-input" class="col-sm-3 col-form-label">Organisasi</label>
                         <label for="example-text-input" class="col-sm-7 col-form-label">: KARAWANG PEDULI</label>
                     </div>
                     <div class="row">

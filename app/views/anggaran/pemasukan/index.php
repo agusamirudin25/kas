@@ -66,6 +66,7 @@ $dataDonatur        = $data['donatur'];
                                 <th>Tanggal</th>
                                 <th>Donatur</th>
                                 <th>nominal</th>
+                                <th>Kegiatan</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -226,13 +227,25 @@ $dataDonatur        = $data['donatur'];
             },
             method: 'post',
             dataType: 'json',
-            success: function(data) {
+            success: function(response) {
                 var data_load = '';
+                var data = response.data;
+                var kegiatan = response.kegiatan;
                 num = 0;
                 console.log(data);
                 if (data.length != 0) {
 
                     for (let index = 0; index < data.length; index++) {
+                        let elemSelectKegiatan = `<select class="form-control" name="kegiatan" id="">`;
+                        kegiatan.forEach(element => {
+                            if (element.id_kegiatan == data[index].id_kegiatan) {
+                                elemSelectKegiatan += `<option selected value="${element.id_kegiatan}">${element.nama_kegiatan}</option>`;
+                            }else{
+                                elemSelectKegiatan += `<option value="${element.id_kegiatan}">${element.nama_kegiatan}</option>`;
+                            }
+                        });
+                        elemSelectKegiatan += `</select>`;
+
                         num++;
                         const element = data[index];
                         var inner_data = "save_" + index;
@@ -255,6 +268,7 @@ $dataDonatur        = $data['donatur'];
                         data_load += '          <input class="form-control" value="' + element.id_donatur + '" type="hidden" name="id_donatur" id="' + inner_view3 + '" placeholder="id_donatur" required >'
                         data_load += '    </td>'
                         data_load += '    <td class="dataInput d-flex"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">Rp. </span></div><input type="text" class="form-control nominalData" value="' + element.nominal + '" name="nominal" placeholder="nominal" required></td>'
+                        data_load += `<td class="dataInput">${elemSelectKegiatan}</td>`
                         
                         data_load += '    <td class="dataInput">'
                         data_load += '          <button class="getHapus btn btn-danger waves-effect waves-light" data-id="' + element.id_anggaran + '" onclick="' + function_connfirmation + '"><span>Hapus</span></button>'
@@ -267,8 +281,8 @@ $dataDonatur        = $data['donatur'];
                 $('#resultAnggaran').html(data_load);
                 $('.nominalData').mask('000.000.000.000', {reverse: true});
             },
-            error: function(data) {
-                console.log(data);
+            error: function(response) {
+                console.log(response);
                 console.log("ERROR");
             }
         });
@@ -276,7 +290,6 @@ $dataDonatur        = $data['donatur'];
 
     function hapusData(id) {
         let isExecuted = confirm("Yakin?");
-        console.log(isExecuted);
         if (isExecuted) {
             $.ajax({
                 url: '<?= BASEURL ?>/pemasukan/hapus',
@@ -304,7 +317,6 @@ $dataDonatur        = $data['donatur'];
 
     function saveDataElement(id) {
         var data_id = document.getElementById(id).parentElement.parentElement;
-        // console.log(data);
         const dataLength = document.getElementById(id).parentElement.parentElement.firstChild;
         const dataLength1 = document.getElementById(id).parentElement.parentElement.childNodes;
         isEdit = false;
@@ -319,6 +331,7 @@ $dataDonatur        = $data['donatur'];
 
                     for (let j = 0; j < element.children.length; j++) {
                         const element01 = element.children[j];
+                        console.log(element01);
                         if (element01.tagName == "INPUT" || element01.tagName == "SELECT") {
                             element01_name = element01.name;
                             if (element01.tagName == "SELECT") {
@@ -444,6 +457,12 @@ $dataDonatur        = $data['donatur'];
     }
 
     function tambahDataElement(id) {
+        let kegiatan = <?= json_encode($dataKegiatan) ?>;
+        let elemSelectKegiatan = `<select class="form-control" name="kegiatan" id="">`;
+        kegiatan.forEach(element => {          
+            elemSelectKegiatan += `<option value="${element.id_kegiatan}">${element.nama_kegiatan}</option>`;
+        });
+        elemSelectKegiatan += `</select>`;
         id = parseInt(id) + 1
         var inner_data = "tambah_" + id;
         var inner_view = "lihat_" + id;
@@ -465,6 +484,7 @@ $dataDonatur        = $data['donatur'];
         data_load += '          <input class="form-control" value="" type="hidden" name="id_donatur" id="' + inner_view3 + '" placeholder="id_donatur" required >'
         data_load += '    </td>'
         data_load += '    <td class="dataInput d-flex"><div class="input-group-prepend"><span class="input-group-text" id="basic-addon1">Rp. </span></div><input type="text" class="form-control nominalData" name="nominal" placeholder="nominal" required></td>'
+        data_load += `<td class="dataInput">${elemSelectKegiatan}</td>`
         data_load += '    <td class="dataInput">'
         data_load += '          <button class="btn btn-danger waves-effect waves-light"  onclick="' + function_remove + '"><span>Hapus</span></button>'
         data_load += '          <button class="save btn btn-primary waves-effect waves-light" id="' + inner_data + '" onclick="' + function_save + '">Simpan</button>'
