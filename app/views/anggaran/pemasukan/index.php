@@ -2,6 +2,7 @@
 $dataKegiatan       = $data['kegiatan'];
 $dataDonatur        = $data['donatur'];
 $dataPemasukan = $data['pemasukan'];
+$dataRekap = $data['rekap'];
 ?>
 <div class="breadcrumbbar">
     <div class="row align-items-center">
@@ -22,7 +23,44 @@ $dataPemasukan = $data['pemasukan'];
     <div id="message"></div>
 </div>
 <div class="contentbar">
-
+    <div class="row " id="cardAnggaran">
+        <div class="col-lg">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-sm-6">
+                        <h3>Rekap Saldo</h3>
+                    </div>
+                    <table class="table table-bordered data-table-format" width="100%">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kegiatan</th>
+                                <th>Pemasukan</th>
+                                <th>Pengeluaran</th>
+                                <th>Saldo</th>
+                            </tr>
+                        </thead>
+                        <!-- <tbody> -->
+                        <tbody>
+                            <?php
+                            $no = 1; 
+                            foreach($dataRekap as $item) : ?>
+                                <tr>
+                                    <td><?= $no++ ?></td>
+                                    <td><?= $item['nama_kegiatan'] ?></td>
+                                    <td><?= 'Rp. ' . number_format($item['pemasukan'], 0, ',', '.') ?></td>
+                                    <td><?= 'Rp. ' . number_format($item['pengeluaran'], 0, ',', '.') ?></td>
+                                    <td><?= 'Rp. ' . number_format($item['pemasukan'] - $item['pengeluaran'], 0, ',', '.') ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="contentbar">
     <div class="row " id="cardAnggaran">
         <div class="col-lg">
             <div id="message"></div>
@@ -69,9 +107,6 @@ $dataPemasukan = $data['pemasukan'];
             </div>
         </div>
     </div>
-
-    <div class="row d-flex justify-content-start formSubmitData" style="display: none;" id="formSubmitData"></div>
-
 </div>
 
 

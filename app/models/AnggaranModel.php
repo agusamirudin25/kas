@@ -39,6 +39,15 @@ class AnggaranModel
         return $allData;
     }
 
+    public function getDataPengeluaran()
+    {
+        $allData = [];
+        $this->db->query(" SELECT a.*, d.*, k.nama_kegiatan FROM anggaran a LEFT JOIN donatur d on d.id_donatur = a.id_donatur
+        LEFT JOIN kegiatan k ON a.id_kegiatan = k.id_kegiatan WHERE tipe_anggaran = '" . UANG_KELUAR . "'");
+        $allData = $this->db->resultset();
+        return $allData;
+    }
+
     public function getDataByIdKegiatan($id_kegiatan, $tipe_anggaran)
     {
         $allData = [];
@@ -61,12 +70,19 @@ class AnggaranModel
         return $allData;
     }
 
-    public function tambahData($data)
+    public function tambahData($data, $file = null)
     {
-        $query = " INSERT INTO 
-                anggaran(id_anggaran, tanggal, nominal, keterangan, tipe_anggaran, id_kegiatan, status, id_donatur)  
-                VALUES ('', :tanggal, :nominal, :keterangan, :tipe_anggaran, :id_kegiatan, :status, :id_donatur)
-            ";
+        if($file != null){
+            $query = " INSERT INTO 
+                    anggaran(id_anggaran, tanggal, nominal, keterangan, tipe_anggaran, id_kegiatan, status, id_donatur, file_bukti)  
+                    VALUES ('', :tanggal, :nominal, :keterangan, :tipe_anggaran, :id_kegiatan, :status, :id_donatur, :file_bukti);
+                ";
+        }else{
+            $query = " INSERT INTO 
+                    anggaran(id_anggaran, tanggal, nominal, keterangan, tipe_anggaran, id_kegiatan, status, id_donatur)  
+                    VALUES ('', :tanggal, :nominal, :keterangan, :tipe_anggaran, :id_kegiatan, :status, :id_donatur);
+                ";
+        }
         $this->db->query($query);
         $this->db->bind('tanggal', $data['tanggal']);
         $this->db->bind('nominal', $data['nominal']);
@@ -75,6 +91,9 @@ class AnggaranModel
         $this->db->bind('id_kegiatan', $data['id_kegiatan']);
         $this->db->bind('status', $data['status']);
         $this->db->bind('id_donatur', $data['id_donatur']);
+        if($file != null){
+            $this->db->bind('file_bukti', $data['file_bukti']);
+        }
 
         $this->db->execute();
         return $this->db->rowCount();
@@ -89,6 +108,7 @@ class AnggaranModel
                         tipe_anggaran   =:tipe_anggaran,
                         id_kegiatan     =:id_kegiatan,
                         id_donatur      =:id_donatur,
+                        file_bukti      =:file_bukti,
                         status          =:status 
                     WHERE 
                         id_anggaran =:id_anggaran
@@ -101,6 +121,7 @@ class AnggaranModel
         $this->db->bind('tipe_anggaran', $data['tipe_anggaran']);
         $this->db->bind('id_kegiatan', $data['id_kegiatan']);
         $this->db->bind('id_donatur', $data['id_donatur']);
+        $this->db->bind('file_bukti', $data['file_bukti']);
         $this->db->bind('status', $data['status']);
 
         $this->db->execute();
@@ -175,6 +196,13 @@ class AnggaranModel
         $this->db->bind('id_kegiatan', $id_kegiatan);
         $this->db->execute();
         return $this->db->rowCount();
+    }
+
+    function rekap()
+    {
+        $this->db->query(" SELECT k.nama_kegiatan, (SELECT SUM(nominal) FROM anggaran WHERE id_kegiatan = a.id_kegiatan AND tipe_anggaran = 1) as `pemasukan`, (SELECT SUM(nominal) FROM anggaran WHERE id_kegiatan = a.id_kegiatan AND tipe_anggaran = 0) as `pengeluaran` FROM `anggaran` a JOIN kegiatan k ON a.id_kegiatan = k.id_kegiatan
+        GROUP BY a.id_kegiatan ");
+        return $this->db->resultset();
     }
 }
 

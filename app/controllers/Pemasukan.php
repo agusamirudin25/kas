@@ -7,6 +7,7 @@ class Pemasukan extends Controller
         $data['kegiatan'] = $this->model("KegiatanModel")->getAllDataStatusWiting();
         $data['donatur'] = $this->model("DonaturModel")->getAllData();
         $data['pemasukan'] = $this->model("AnggaranModel")->getDataPemasukan();
+        $data['rekap'] = $this->model("AnggaranModel")->rekap();
         $this->view('templates/header', $data);
         $this->view('templates/sidemenu');
         $this->view('anggaran/pemasukan/index', $data);
