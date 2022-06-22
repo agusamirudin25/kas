@@ -6,7 +6,7 @@
         </div>
     </div>
     <!-- Begin page -->
-    <div id="containerbar" class="container-fluid">
+    <div id="containerbar" class="container-fluid w-100">
         <!-- ========== Left Sidebar Start ========== -->
         <!-- Start Leftbar -->
         <div class="leftbar">

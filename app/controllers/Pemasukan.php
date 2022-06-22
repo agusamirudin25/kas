@@ -6,6 +6,7 @@ class Pemasukan extends Controller
         $data['judul'] = 'Pemasukan';
         $data['kegiatan'] = $this->model("KegiatanModel")->getAllDataStatusWiting();
         $data['donatur'] = $this->model("DonaturModel")->getAllData();
+        $data['pemasukan'] = $this->model("AnggaranModel")->getDataPemasukan();
         $this->view('templates/header', $data);
         $this->view('templates/sidemenu');
         $this->view('anggaran/pemasukan/index', $data);
@@ -31,27 +32,57 @@ class Pemasukan extends Controller
         echo json_encode($allData);
     }
 
+    public function tambahData()
+    {
+        $data['judul'] = 'Tambah Pemasukan';
+        $data['kegiatan'] = $this->model("KegiatanModel")->getAllDataStatusWiting();
+        $data['donatur'] = $this->model("DonaturModel")->getAllData();
+        $this->view('templates/header', $data);
+        $this->view('templates/sidemenu');
+        $this->view('anggaran/pemasukan/tambah', $data);
+        $this->view('templates/footer');
+    }
+
     public function tambah()
     {
         $_POST['tipe_anggaran'] = UANG_MASUK;
         $_POST['status'] = WAITING;
-        $saveData = $_POST;
-        $saveData['nominal'] = str_replace('.', '', $saveData['nominal']);
-        $saveData['id_kegiatan'] = $saveData['kegiatan'];
-        unset($saveData['kegiatan']);
-        echo "<pre>";
-        print_r($saveData);
-        echo "</pre>";
-
-        if ($this->model("AnggaranModel")->tambahData($saveData) > 0) {
-            Flasher::setFlash('berhasil', 'ditambahkan', 'success', 'anggaran');
-            header('Location: ' . BASEURL . '/anggaran');
-            exit;
-        } else {
-            Flasher::setFlash('gagal', 'ditambahkan', 'danger', 'anggaran');
-            header('Location: ' . BASEURL . '/anggaran');
-            exit;
+        $dataInput = $_POST;
+        $arrKegiatan = $dataInput['kegiatan'];
+        $arrNominal = $dataInput['nominal'];
+        if(count($arrKegiatan) > 0){
+            foreach($arrKegiatan as $key => $kegiatan){
+                $dataInsert = [
+                    'id_kegiatan' => $kegiatan,
+                    'id_donatur' => $dataInput['id_donatur'],
+                    'tipe_anggaran' => UANG_MASUK,
+                    'status' => WAITING,
+                    'nominal' => str_replace('.', '', $arrNominal[$key]),
+                    'tanggal' => $dataInput['tanggal'],
+                    'keterangan' => $dataInput['keterangan']
+                ];
+                $this->model("AnggaranModel")->tambahData($dataInsert);
+            }
         }
+        $response = [
+            'status' => 'success',
+            'message' => 'Data berhasil ditambahkan',
+            'redirect' => BASEURL . '/pemasukan'
+        ];
+        echo json_encode($response);
+        die;
+    }
+
+    public function ubahData($id)
+    {
+        $data['judul'] = 'Ubah Pemasukan';
+        $data['kegiatan'] = $this->model("KegiatanModel")->getAllDataStatusWiting();
+        $data['donatur'] = $this->model("DonaturModel")->getAllData();
+        $data['anggaran'] = $this->model("AnggaranModel")->getOneData($id);
+        $this->view('templates/header', $data);
+        $this->view('templates/sidemenu');
+        $this->view('anggaran/pemasukan/ubah', $data);
+        $this->view('templates/footer');
     }
 
     public function ubah()
@@ -60,16 +91,21 @@ class Pemasukan extends Controller
         $_POST['status'] = WAITING;
         $updateData = $_POST;
         $updateData['nominal'] = str_replace('.', '', $updateData['nominal']);
-        $updateData['id_kegiatan'] = $_POST['kegiatan'];
-        unset($updateData['kegiatan']);
 
         if ($this->model("AnggaranModel")->ubahData($updateData) > 0) {
-            Flasher::setFlash('berhasil', 'ditambahkan', 'success', 'anggaran');
-            exit;
+            $response = [
+                'status' => 'success',
+                'message' => 'Data berhasil diubah',
+                'redirect' => BASEURL . '/pemasukan'
+            ];
         } else {
-            Flasher::setFlash('gagal', 'ditambahkan', 'danger', 'anggaran');
-            exit;
+            $response = [
+                'status' => 'false',
+                'message' => 'Data gagal diubah',
+            ];
         }
+        echo json_encode($response);
+        die;
     }
 
     public function hapus()

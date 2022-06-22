@@ -33,7 +33,8 @@ class AnggaranModel
     public function getDataPemasukan()
     {
         $allData = [];
-        $this->db->query(" SELECT * FROM anggaran WHERE tipe_anggaran = '" . UANG_MASUK . "'");
+        $this->db->query(" SELECT a.*, d.*, k.nama_kegiatan FROM anggaran a LEFT JOIN donatur d on d.id_donatur = a.id_donatur
+        LEFT JOIN kegiatan k ON a.id_kegiatan = k.id_kegiatan WHERE tipe_anggaran = '" . UANG_MASUK . "'");
         $allData = $this->db->resultset();
         return $allData;
     }
@@ -81,9 +82,6 @@ class AnggaranModel
 
     public function ubahData($data)
     {
-        echo"<pre>";
-        print_r($data);
-        echo"</pre>";
         $query = "  UPDATE anggaran SET 
                         tanggal         =:tanggal,
                         nominal         =:nominal,
