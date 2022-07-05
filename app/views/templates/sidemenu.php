@@ -89,16 +89,6 @@
                         <ul class="vertical-menu">
                             <li>
                                 <a href="javaScript:void();">
-                                    <img src="<?= BASEURL ?>/assets/images/svg-icon/dashboard.svg" class="img-fluid" alt="dashboard"><span>Kategori</span><i class="feather icon-chevron-right pull-right"></i>
-                                </a>
-                                <ul class="vertical-submenu">
-                                    <li><a href="<?= BASEURL ?>/user">User</a></li>
-                                    <li><a href="<?= BASEURL ?>/pengurus">Pengurus</a></li>
-                                    <li><a href="<?= BASEURL ?>/donatur">Donatur</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="javaScript:void();">
                                     <img src="<?= BASEURL ?>/assets/images/svg-icon/dashboard.svg" class="img-fluid" alt="dashboard"><span>main</span><i class="feather icon-chevron-right pull-right"></i>
                                 </a>
                                 <ul class="vertical-submenu">
