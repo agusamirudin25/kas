@@ -41,7 +41,7 @@
                             <div class="col-sm-10">
                                 <select class="form-control" name="jabatan" id="jabatan">
                                     <option value="">Select Jabatan</option>
-                                    <option value="<?= KEPALA ?>">Pengurus</option>
+                                    <option value="<?= KEPALA ?>">Kepala Bagian</option>
                                     <option value="<?= BENDAHARA ?>">Bendahara</option>
                                     <option value="<?= STAF ?>">Staff</option>
                                 </select>

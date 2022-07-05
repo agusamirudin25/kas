@@ -18,7 +18,7 @@ class PengurusModel
         for ($i = 0; $i < count($allData); $i++) {
             $jabatan_loop = $allData[$i]['jabatan'];
             if ($jabatan_loop == KEPALA) {
-                $jabatan_loop = "Pengurus";
+                $jabatan_loop = "Kepala Bagian";
             } else  if ($jabatan_loop == BENDAHARA) {
                 $jabatan_loop = "Bendahara";
             }else if ($jabatan_loop == STAF) {

@@ -49,7 +49,7 @@
                         <label for="example-text-input" class="col-sm-7 col-form-label">: KARAWANG PEDULI</label>
                     </div>
                     <div class="row">
-                        <label for="example-text-input" class="col-sm-3 col-form-label">Pengurus</label>
+                        <label for="example-text-input" class="col-sm-3 col-form-label">Kepala Bagian</label>
                         <label for="example-text-input" class="col-sm-9 col-form-label">: <?= $data['nama_KPA']['nama_pengurus'] ?></label>
                     </div>
                     <div class="row">

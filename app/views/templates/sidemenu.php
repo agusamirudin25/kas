@@ -241,7 +241,7 @@
 
                                         <li class="list-inline-item">
                                             <h3>
-                                                Perancangan sistem informasi buku kas umum berbasis web
+                                            Perancangan sistem informasi aktivitas pendanaan berbasis web
                                             </h3>
                                         </li>
                                     </ul>
